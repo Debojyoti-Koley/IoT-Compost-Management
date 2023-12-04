@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+p {
+    color: #666;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+.logout{
+    background-color: #ef1916;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+.heading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    </style>
+    <title>Home</title>
+</head>
+<body>
+    {% if registered_username %}
+        <div class="heading">
+            <h2>Compost Dashboard</h2>
+            <p>You are logged in as: {{ registered_username }}</p>
+        </div>
+        
+
+        {% if Items %}
+            <h3>Sections</h3>
+            {% for item in Items %}
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Temperature</th>
+                            <th>Add Date</th>
+                            <th>Humidity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ item.Temp }}</td>
+                            <td>{{ item.Date_of_add }}</td>
+                            <td>{{ item.Humidity }}</td>
+                        </tr> 
+                    </tbody>
+                </table>
+            {% endfor %}
+        {% endif %}
+        <h2>Enter Temperature and Humidity</h2>
+
+        <form action="{% url 'add_compost' %}" method="post">
+            {% csrf_token %}
+            <label for="temperature">Temperature:</label><br>
+            <input type="text" id="temperature" name="Temp" placeholder="Enter temperature..."><br><br>
+            <label for="humidity">Humidity:</label><br>
+            <input type="text" id="humidity" name="Humidity" placeholder="Enter humidity..."><br><br>
+            <input type="submit" value="Submit">
+          </form>
+    <!-- <a href="{% url 'add_compost' %}"><button>Add Compost data</button></a>          -->
+    <a href="{% url 'logout_view' %}"><button class="logout">logout</button></a>         
+    {% else %}
+        <h2>Welcome to the Home Page</h2>
+        <p>You are not logged in. Please log in or register.</p>
+        <a href="{% url 'login' %}"><button>Login</button></a>
+        <a href="{% url 'register' %}"><button>Register</button></a>
+    {% endif %}
+</body>
+</html>
